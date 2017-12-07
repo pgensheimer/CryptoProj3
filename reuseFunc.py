@@ -4,7 +4,7 @@ import binascii as ba
 from Crypto.Cipher import AES
 
 def readInputs(commandl):
-    print("in reuse") 
+    #print("in reuse") 
     #call with: kname, iname, oname, vname = readInputs(sys.argv[1:])
 
     iname = ''
@@ -28,7 +28,7 @@ def readInputs(commandl):
             kname = arg
         elif opt in ("-v", "--vfile"):
             vname = arg
-    print ('Input file is "', iname)
+#    print ('Input file is "', iname)
 #    print ('key is "', kname)	
 #    print ('Output file is "', oname)	
 #    print ('IV file is "', vname)	

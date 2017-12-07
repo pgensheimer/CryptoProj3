@@ -8,7 +8,7 @@ def main():
     kname, mname, tname, vname = readInputs(sys.argv[1:])
    
 
-    print("here")
+    #print("here")
     blocksize = 16
     l = []
     isIV = 0
@@ -38,7 +38,7 @@ def main():
     myhex = myhex[:16]
     
     #ciphertext += myhex
-    print("myhex prebytes is " + str(myhex))
+    #print("myhex prebytes is " + str(myhex))
     
     myhex = bytes(myhex, 'utf-8')
     ciphertext = b''.join([myhex])
@@ -47,37 +47,32 @@ def main():
 
    
     #print("Unpadded message is " + message)
+    
+    messagelength = len(message) %16
+    if messagelength !=0:
+        messagelength = int(len(message) / 16) +1
+    else:
+        messagelength = len(message) / 16
+
+    #print("mlenght is " + str(messagelength))
+    mlength = str(messagelength)
+    
+    while len(mlength) < 16:
+        mlength = "0" + mlength
+    #print("mlenght2 is " + mlength)
+    message = mlength + message
     padded = pad(message)
     #NEED To ADD LENGTH TO START OF MESSAGE
-
-    #print("Padded message is " + padded.decode('utf-8'))
-    #print("hex mesage " + str(ba.hexlify(padded)))
+    
+    
+    #print("message is "+ str(message))
     for i in range(len(padded)):
         if(i%blocksize == blocksize-1 and i != 0):
-            #print(padded[i-blocksize+1:i+1])
             l.append(padded[i-blocksize+1:i+1])
-    print("numblocks is " +str(i))
-    #for i in range(len(l)):
-        #print("hex is " + str((l[i])))
+    #print("numblocks is " +str(i))
     
-    #print("l is " + str(ba.hexlify(l[0]))) 
-    #print()
-    #print(ciphertext)
-    #l[0] = bytearray()
-    #z = bytearray()
-    #z.extend(l[0].encode())
-    #print("l 0 is  encoded z " + str(z))
-    #c = strxor.strxor(str(myhex), str(l[0]))
-    #print("myhex is " + str(myhex))
-    #print("l0 is " + str(l[0]))
-    #print("length myhex is " + str(len(myhex)))
-    #print("length l0 is " + str(len(l[0])))
+    #print("l(i) is "+ str(l[1])) 
     c = strxor.strxor(myhex, (l[0]))
-    #print(c)
-    #h = strxor.strxor(myhex, c)
-    #print("h is " +str((h)))
-    #c = xor(myhex, (l[0]))
-    #print("C is " +str(ba.hexlify(c)))
     
     cipher = encrypt(key, c)
     #print("cipher is " + str(cipher))
