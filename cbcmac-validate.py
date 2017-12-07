@@ -17,10 +17,13 @@ def main():
         isIV = 1
     kfile = open(kname, 'r')
     mfile = open(mname, 'r')
-    tfile = open(tname, 'wb')
+    tfile = open(tname, 'rb')
 
     message = mfile.read()
     message = message.rstrip()
+    
+    tag = tfile.readline()
+    tag = tag.rstrip()
 
     key = kfile.read()
     key = key.rstrip()
@@ -89,15 +92,19 @@ def main():
         cipher = encrypt(key, c)
         #print("cipher is " + str(cipher))
         ciphertext = createCipher(ciphertext, (cipher))
-
-    #print(ciphertext)
-    ciphertext = ciphertext[16:] 
-
-#    ciphertext = str(ciphertext)
     
-    print("ciphertext is "+ str(ciphertext))
+    ciphertext = ciphertext[16:]
     
-    tfile.write((ciphertext))
+    print("ciphertext is "+str(ciphertext))
+    
+    print("old tag is " + str(tag))
+    
+    
+    if tag == ciphertext:
+        print("True")
+    else:
+        print("False")
+    #tfile.write((ciphertext))
 
 def pad(message):
     
