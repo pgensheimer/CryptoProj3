@@ -91,7 +91,7 @@ def main():
         ciphertext = createCipher(ciphertext, (cipher))
 
     #print(ciphertext)
-    ciphertext = ciphertext[16:] 
+    ciphertext = ciphertext[-16:] 
 
 #    ciphertext = str(ciphertext)
     
