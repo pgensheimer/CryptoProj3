@@ -36,15 +36,19 @@ def main():
         myhex = myhex[:16]
     myhex = "000000000000000000000000000"
     myhex = myhex[:16]
+    
     #ciphertext += myhex
     print("myhex prebytes is " + str(myhex))
+    
     myhex = bytes(myhex, 'utf-8')
     ciphertext = b''.join([myhex])
+    
     #print("myhex is " + str(myhex))
 
    
     #print("Unpadded message is " + message)
     padded = pad(message)
+    #NEED To ADD LENGTH TO START OF MESSAGE
 
     #print("Padded message is " + padded.decode('utf-8'))
     #print("hex mesage " + str(ba.hexlify(padded)))
@@ -52,7 +56,7 @@ def main():
         if(i%blocksize == blocksize-1 and i != 0):
             #print(padded[i-blocksize+1:i+1])
             l.append(padded[i-blocksize+1:i+1])
-    
+    print("numblocks is " +str(i))
     #for i in range(len(l)):
         #print("hex is " + str((l[i])))
     
