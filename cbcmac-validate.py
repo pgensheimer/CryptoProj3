@@ -95,9 +95,9 @@ def main():
     
     ciphertext = ciphertext[-16:]
     
-    print("ciphertext is "+str(ciphertext))
+  #  print("ciphertext is "+str(ciphertext))
     
-    print("old tag is " + str(tag))
+   # print("old tag is " + str(tag))
     
     
     if tag == ciphertext:
