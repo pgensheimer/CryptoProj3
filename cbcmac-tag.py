@@ -5,9 +5,10 @@ from Crypto.Util import strxor
 import random
 from reuseFunc import readInputs
 def main():
-    kname, iname, oname, vname = readInputs(sys.argv[1:])
+    kname, mname, tname, vname = readInputs(sys.argv[1:])
    
 
+    print("here")
     blocksize = 16
     l = []
     isIV = 0
@@ -15,10 +16,10 @@ def main():
         vfile = open(vname, 'r')
         isIV = 1
     kfile = open(kname, 'r')
-    ifile = open(iname, 'r')
-    ofile = open(oname, 'wb')
+    mfile = open(mname, 'r')
+    tfile = open(tname, 'wb')
 
-    message = ifile.read()
+    message = mfile.read()
     message = message.rstrip()
 
     key = kfile.read()
@@ -33,9 +34,10 @@ def main():
         myhex = vfile.read()
         myhex = myhex.rstrip()
         myhex = myhex[:16]
-    myhex = b'0000000000000000000000'
+    myhex = "000000000000000000000000000"
+    myhex = myhex[:16]
     #ciphertext += myhex
-    #print("myhex prebytes is " + str(myhex))
+    print("myhex prebytes is " + str(myhex))
     myhex = bytes(myhex, 'utf-8')
     ciphertext = b''.join([myhex])
     #print("myhex is " + str(myhex))
@@ -91,7 +93,7 @@ def main():
 
     #print(ciphertext)
     
-    ofile.write((ciphertext))
+    tfile.write((ciphertext))
 
 def pad(message):
     
