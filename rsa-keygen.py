@@ -6,9 +6,10 @@ from math import gcd
 def readInputs(commandl):
     pname = ''
     sname = ''
+    cname = ''
     numbits =0
     try:
-        opts, args = getopt.getopt(commandl, "p:s:n:", ["pfile=", "sfile =", "numbits="])
+        opts, args = getopt.getopt(commandl, "p:s:n:c:", ["cfile=","pfile=", "sfile =", "numbits="])
     except getopt.GetoptError:
         sys.exit(2)
     for opt, arg in opts:
@@ -16,6 +17,8 @@ def readInputs(commandl):
             pname = arg
         elif opt in ("-s", "--sfile"):
             sname = arg
+        elif opt in ("-c", "--cfile"):
+            cname = arg
         elif opt in ("-n", "--numbits"):
             numbits = arg
     if(pname == ''):
@@ -28,7 +31,7 @@ def readInputs(commandl):
         print("you have to include a keylength")
         exit(1)
     
-    return pname, sname, numbits
+    return pname, sname, numbits, cname
 
 #this is the function that implement miller rabin prime testing
 def isPrime(bits, k):
@@ -112,7 +115,7 @@ def egcd(a,b):
         return (g, x-(b//a)* y,y)
 
 def main():
-    pname, sname, numbits = readInputs(sys.argv[1:])
+    pname, sname, numbits, cname = readInputs(sys.argv[1:])
 
     #print('numbits is "', numbits)
     
