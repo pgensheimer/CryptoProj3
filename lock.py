@@ -39,12 +39,16 @@ def main():
     aeskey.write(str(randkey))
     aeskey.close()
     aeskey = open(aesfilename, 'r')
-    keymanifest = open("symkeyman" 'w')
+    symkeyfile = "symkeyman"
+    keymanifest = open(symkeyfile, 'w')
+    
     print(randkey)
     #make randkeyfile
-    ret = subprocess.check_output(["python", "rsa-enc.py", "-k", args.pname, "-i", aeskey, "-o", keymanifest])
+
     keymanifest.close()
     aeskey.close()
+    ret = subprocess.check_output(["python", "rsa-enc.py", "-k", args.pname, "-i", aesfilename, "-o", symkeyfile])
+    
   #  subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
     #print("back from subprocess")
 main()

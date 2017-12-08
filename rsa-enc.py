@@ -3,7 +3,7 @@
 import math
 import binascii as ba
 import sys, getopt
-from paddingfunc import paddingFunc
+from paddingfunc2 import paddingFunc
 
 def readInputs(commandl):
     kname = ''
