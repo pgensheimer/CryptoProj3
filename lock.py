@@ -1,3 +1,5 @@
+#rsa_keygen = __import__('rsa-keygen')
+import subprocess
 import argparse
 import math
 import sys, getopt
@@ -7,6 +9,7 @@ from paddingfunc import paddingFunc
 #def readInputs(commandl):
 
 def main():
+    print(1)
     #dname, pname, rname, vkname = readInputs(sys.argv[1:])
     parser = argparse.ArgumentParser(description='take in input args')
     parser.add_argument('-d', help ='directory file',action ="store", dest="dname", type=str)
@@ -18,4 +21,7 @@ def main():
     print("pname is "+ args.pname)
     print("rname is "+ args.rname)
     print("vkname is "+ args.vkname)
+
+    subprocess.run(["python", "rsa-keygen.py", "-p", arg.pname, "-s", args.vkname, "-n", "256"])
+    print("back from subprocess")
 main()

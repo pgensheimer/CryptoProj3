@@ -138,6 +138,7 @@ def egcd(a,b):
 def main():
     pname, sname, numbits, cname = readInputs(sys.argv[1:])
 
+    #print("in rsa keygen")
     #print('numbits is "', numbits)
     
     pfile = open(pname,'w')
