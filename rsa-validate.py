@@ -60,24 +60,27 @@ def main():
     o = open(oname, 'r')
 
     numbits = int(k.readline().rstrip())
+   # print(numbits)
     n = int(k.readline().rstrip())
+    #print(n)
     e = int(k.readline().rstrip())
+   # print(e)
     message = i.read().rstrip()
     signat = o.read().rstrip()
     #print("right before hashing\n")
-    
+   # print("message is "+message)
     message = hashfunc(message)
     paddedmessage = paddingFunc(message, int(numbits/2))
-    #print(paddedmessage)
+   # print("padfunc is " +str(paddedmessage))
     if(paddedmessage == 1):
         quit(1)
     else:
         int_mess = int.from_bytes(paddedmessage, byteorder='big')
-        #print("int mess:", int_mess)
+   #     print("int mess:", int_mess)
         #print("int mess % n:", int_mess % n)
         Exp = modexp(int_mess, e, n)
-    print("Exp is "+ str(Exp))
-    print("sig is "+ str(signat))
+  #  print("Exp is "+ str(Exp))
+ #   print("sig is "+ str(signat))
     
     if(str(Exp) == signat):
         print("True")

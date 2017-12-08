@@ -95,7 +95,7 @@ def main():
 
 #    ciphertext = str(ciphertext)
     
-  //  print("ciphertext is "+ str(ciphertext))
+#    print("ciphertext is "+ str(ciphertext))
     
     tfile.write((ciphertext))
 
