@@ -34,10 +34,17 @@ def main():
         print("failure: problem verifying public key information")
         exit(1)
     randkey = os.urandom(32)
+    aesfilename = "randAESkey"
+    aeskey = open(aesfilename, 'w')
+    aeskey.write(str(randkey))
+    aeskey.close()
+    aeskey = open(aesfilename, 'r')
+    keymanifest = open("symkeyman" 'w')
     print(randkey)
     #make randkeyfile
-    ret = subprocess.check_output(["python", "rsa-enc.py", "-k", args.pname, "-i", randkeyfile, "-o", args.vkname])
-  
+    ret = subprocess.check_output(["python", "rsa-enc.py", "-k", args.pname, "-i", aeskey, "-o", keymanifest])
+    keymanifest.close()
+    aeskey.close()
   #  subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
     #print("back from subprocess")
 main()
