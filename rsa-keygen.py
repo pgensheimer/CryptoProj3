@@ -3,6 +3,9 @@
 import sys, getopt
 import random
 from math import gcd
+import rsa-sign
+from paddingfunc import paddingFunc
+
 def readInputs(commandl):
     pname = ''
     sname = ''
@@ -170,4 +173,31 @@ def main():
     sfile.write(str(d)+"\n")
     pfile.close()
     sfile.close()
+    pfile = open(pname,'r')
+
+    pubcontents = pfile.read()
+
+    signedpubfile = pname + "-casig"
+    pubsigfile = open(signedpubfile, 'w')
+    
+    if(cname != ""):
+        kfile = open(cname, 'r')
+    else:
+        kfile = open(sfile, 'r')
+
+    numbits = int(kfile.readline().rstrip())
+    n = int(kfile.readline().rstrip())
+    e = int(kfile.readline().rstrip())
+    message = pfile.read().rstrip()
+
+    message = rsa-sign.hashfunc(message)
+    paddedmessage = paddingFunc(message, int(numbits/2))
+    if(paddedmessage == 1):
+        quit(1)
+    else:
+        int_mess = int.from_bytes(paddedmessage, byteorder='big')
+        Exp = modexp(int_mess, e, n)
+
+    pubsigfile.write(str(Exp))
+    
 main()
