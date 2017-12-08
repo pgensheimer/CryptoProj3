@@ -37,6 +37,25 @@ def readInputs(commandl):
     return pname, sname, numbits, cname
 
 #this is the function that implement miller rabin prime testing
+
+def modexp(mess, e, n):
+    count = 1
+    while e:
+        if e & 1:
+            count = count * mess % n
+        e >>= 1
+        mess = mess * mess % n
+    #print(count)
+    return count
+
+def hashfunc(message):
+    m = hashlib.sha256()
+    message = message.encode('utf-8')
+    m.update(message)
+    ret = m.digest()
+    #ret = ret.decode('utf-8')
+    return ret
+
 def isPrime(bits, k):
     
     #k is the correctness factor
@@ -190,7 +209,7 @@ def main():
     e = int(kfile.readline().rstrip())
     message = pfile.read().rstrip()
 
-    message = rsa-sign.hashfunc(message)
+    message = hashfunc(message)
     paddedmessage = paddingFunc(message, int(numbits/2))
     if(paddedmessage == 1):
         quit(1)
