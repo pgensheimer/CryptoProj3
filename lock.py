@@ -38,17 +38,23 @@ def main():
     aeskey = open(aesfilename, 'w')
     aeskey.write(str(randkey))
     aeskey.close()
-    aeskey = open(aesfilename, 'r')
     symkeyfile = "symkeyman"
-    keymanifest = open(symkeyfile, 'w')
-    
+    symkeysig = "symkeyman-casig"
+
     print(randkey)
     #make randkeyfile
 
-    keymanifest.close()
-    aeskey.close()
     ret = subprocess.check_output(["python", "rsa-enc.py", "-k", args.pname, "-i", aesfilename, "-o", symkeyfile])
-    
-  #  subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
+
+    ret = subprocess.check_output(["python", "rsa-sign.py", "-k", args.rname, "-m", aesfilename, "-s", symkeysig])
+
+    for dirName, subdirList, fileList in os.walk(args.dname):
+        for fname in fileList:
+            print(fname)
+            fname2 = args.dname+"/"+fname
+            outfile = fname2+"encrypted"
+            ret = subprocess.check_output(["python", "cbc-enc.py", "-i", fname2, "-k", aesfilename, "-o", outfile])
+
+  #subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
     #print("back from subprocess")
 main()

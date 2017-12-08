@@ -3,11 +3,12 @@ import binascii as ba
 from Crypto.Cipher import AES
 from Crypto.Util import strxor
 import random
-from reuseFunc import readInputs
+from reuseFunc2 import readInputs
 def main():
+    print("1")
     kname, iname, oname, vname = readInputs(sys.argv[1:])
    
-
+    print("2")
     blocksize = 16
     l = []
     isIV = 0
@@ -18,12 +19,13 @@ def main():
     ifile = open(iname, 'r')
     ofile = open(oname, 'wb')
 
+    print("3")
     message = ifile.read()
     message = message.rstrip()
 
     key = kfile.read()
     key = key.rstrip()
-    #print("key is " + str(key))
+    print("key is " + str(key))
     ciphertext =''
     if isIV == 0:
         ran = random.randrange(10**80)
@@ -34,7 +36,7 @@ def main():
         myhex = myhex.rstrip()
         myhex = myhex[:16]
     #ciphertext += myhex
-    #print("myhex prebytes is " + str(myhex))
+    print("myhex prebytes is " + str(myhex))
     myhex = bytes(myhex, 'utf-8')
     ciphertext = b''.join([myhex])
     #print("myhex is " + str(myhex))
@@ -43,7 +45,7 @@ def main():
     #print("Unpadded message is " + message)
     padded = pad(message)
 
-    #print("Padded message is " + padded.decode('utf-8'))
+    print("Padded message is " + padded.decode('utf-8'))
     #print("hex mesage " + str(ba.hexlify(padded)))
     for i in range(len(padded)):
         if(i%blocksize == blocksize-1 and i != 0):
@@ -77,7 +79,7 @@ def main():
     #print("cipher len is " + str(len(cipher)))
     #cipher = str(cipher)
     ciphertext = createCipher(ciphertext, (cipher))
-    #print(ciphertext)
+    print(ciphertext)
     for i in range(1,len(l)):
         #print("xor of " + str(cipher) + " and " + str(l[i]))
         c = strxor.strxor(cipher,(l[i]))

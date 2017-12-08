@@ -4,34 +4,34 @@ import binascii as ba
 from Crypto.Cipher import AES
 
 def readInputs(commandl):
-    #print("in reuse") 
+    print("in reuse") 
     #call with: kname, iname, oname, vname = readInputs(sys.argv[1:])
-    #print(commandl)
+    print(commandl)
     iname = ''
     oname = ''
     kname = ''
     vname = ''
     try:
-        opts, args = getopt.getopt(commandl,"hm:t:k:v",["kfile=", "vfile=","mfile=","tfile="])
+        opts, args = getopt.getopt(commandl,"hi:o:k:v",["kfile=", "vfile=","ifile=","ofile="])
     except getopt.GetoptError:
-        #print ('test.py -k <keyfile> -v <IVfile> -i <inputfile> -o <outputfile>"')
+        print ('test.py -k <keyfile> -v <IVfile> -i <inputfile> -o <outputfile>"')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
             print ('test.py -k <key> -v <IVfile> -i <inputfile> -o <outputfile>')
             sys.exit()
-        elif opt in ("-m", "--mfile"):
+        elif opt in ("-i", "--ifile"):
             iname = arg
-        elif opt in ("-t", "--tfile"):
+        elif opt in ("-o", "--ofile"):
             oname = arg
         elif opt in ("-k", "--kfile"):
             kname = arg
         elif opt in ("-v", "--vfile"):
             vname = arg
-    #print ('Input file is "', iname)
-    #print ('key is "', kname)	
-    #print ('Output file is "', oname)	
-    #print ('IV file is "', vname)	
+    print ('Input file is "', iname)
+    print ('key is "', kname)	
+    print ('Output file is "', oname)	
+    print ('IV file is "', vname)	
 
     if(kname ==''):
         print("you have to inlude a key file")
