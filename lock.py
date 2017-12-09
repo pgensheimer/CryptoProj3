@@ -41,7 +41,7 @@ def main():
     symkeyfile = "symkeyman"
     symkeysig = "symkeyman-casig"
 
-    #print(randkey)
+    print(randkey)
     #make randkeyfile
 
     ret = subprocess.check_output(["python", "rsa-enc.py", "-k", args.pname, "-i", aesfilename, "-o", symkeyfile])
@@ -50,13 +50,11 @@ def main():
 
     for dirName, subdirList, fileList in os.walk(args.dname):
         for fname in fileList:
-            #print(fname)
+            print(fname)
             fname2 = args.dname+"/"+fname
             outfile = fname2+"encrypted"
-            tagfile = outfile+"tag"
             ret = subprocess.check_output(["python", "cbc-enc.py", "-i", fname2, "-k", aesfilename, "-o", outfile])
-            ret = subprocess.check_output(["python", "cbcmac-tag.py", "-m", fname2, "-k", aesfilename, "-t", tagfile])
-            os.remove(fname2)
+
   #subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
     #print("back from subprocess")
 main()
