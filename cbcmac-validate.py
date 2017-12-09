@@ -3,12 +3,12 @@ import binascii as ba
 from Crypto.Cipher import AES
 from Crypto.Util import strxor
 import random
-from reuseFunc2 import readInputs
+from reuseFunc import readInputs
 def main():
-    print("1")
-    kname, iname, oname, vname = readInputs(sys.argv[1:])
+    kname, mname, tname, vname = readInputs(sys.argv[1:])
    
-    print("2")
+
+    #print("here")
     blocksize = 16
     l = []
     isIV = 0
@@ -16,16 +16,18 @@ def main():
         vfile = open(vname, 'r')
         isIV = 1
     kfile = open(kname, 'r')
-    ifile = open(iname, 'r')
-    ofile = open(oname, 'wb')
+    mfile = open(mname, 'r')
+    tfile = open(tname, 'rb')
 
-    print("3")
-    message = ifile.read()
+    message = mfile.read()
     message = message.rstrip()
+    
+    tag = tfile.read()
+    tag = tag.rstrip()
 
     key = kfile.read()
     key = key.rstrip()
-    print("key is " + str(key))
+    #print("key is " + str(key))
     ciphertext =''
     if isIV == 0:
         ran = random.randrange(10**80)
@@ -35,51 +37,52 @@ def main():
         myhex = vfile.read()
         myhex = myhex.rstrip()
         myhex = myhex[:16]
+    myhex = "000000000000000000000000000"
+    myhex = myhex[:16]
+    
     #ciphertext += myhex
-    print("myhex prebytes is " + str(myhex))
+    #print("myhex prebytes is " + str(myhex))
+    
     myhex = bytes(myhex, 'utf-8')
     ciphertext = b''.join([myhex])
+    
     #print("myhex is " + str(myhex))
 
    
     #print("Unpadded message is " + message)
-    padded = pad(message)
+    
+    messagelength = len(message) %16
+    if messagelength !=0:
+        messagelength = int(len(message) / 16) +1
+    else:
+        messagelength = len(message) / 16
 
-    print("Padded message is " + padded.decode('utf-8'))
-    #print("hex mesage " + str(ba.hexlify(padded)))
+    #print("mlenght is " + str(messagelength))
+    mlength = str(messagelength)
+    
+    while len(mlength) < 16:
+        mlength = "0" + mlength
+    #print("mlenght2 is " + mlength)
+    message = mlength + message
+    padded = pad(message)
+    #NEED To ADD LENGTH TO START OF MESSAGE
+    
+    
+    #print("message is "+ str(message))
     for i in range(len(padded)):
         if(i%blocksize == blocksize-1 and i != 0):
-            #print(padded[i-blocksize+1:i+1])
             l.append(padded[i-blocksize+1:i+1])
+    #print("numblocks is " +str(i))
     
-    #for i in range(len(l)):
-        #print("hex is " + str((l[i])))
-    
-    #print("l is " + str(ba.hexlify(l[0]))) 
-    #print()
-    #print(ciphertext)
-    #l[0] = bytearray()
-    #z = bytearray()
-    #z.extend(l[0].encode())
-    #print("l 0 is  encoded z " + str(z))
-    #c = strxor.strxor(str(myhex), str(l[0]))
-    #print("myhex is " + str(myhex))
-    #print("l0 is " + str(l[0]))
-    #print("length myhex is " + str(len(myhex)))
-    #print("length l0 is " + str(len(l[0])))
+    #print("l(i) is "+ str(l[1])) 
     c = strxor.strxor(myhex, (l[0]))
-    #print(c)
-    #h = strxor.strxor(myhex, c)
-    #print("h is " +str((h)))
-    #c = xor(myhex, (l[0]))
-    #print("C is " +str(ba.hexlify(c)))
     
     cipher = encrypt(key, c)
     #print("cipher is " + str(cipher))
     #print("cipher len is " + str(len(cipher)))
     #cipher = str(cipher)
     ciphertext = createCipher(ciphertext, (cipher))
-    print(ciphertext)
+    #print(ciphertext)
     for i in range(1,len(l)):
         #print("xor of " + str(cipher) + " and " + str(l[i]))
         c = strxor.strxor(cipher,(l[i]))
@@ -89,10 +92,19 @@ def main():
         cipher = encrypt(key, c)
         #print("cipher is " + str(cipher))
         ciphertext = createCipher(ciphertext, (cipher))
-
-    #print(ciphertext)
     
-    ofile.write((ciphertext))
+    ciphertext = ciphertext[-16:]
+    
+    #print("ciphertext is "+str(ciphertext))
+    
+    #print("old tag is " + str(tag))
+    
+    
+    if tag == ciphertext:
+        print("True")
+    else:
+        print("False")
+    #tfile.write((ciphertext))
 
 def pad(message):
     

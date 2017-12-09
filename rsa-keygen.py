@@ -1,14 +1,17 @@
 #this file creates a valid RSA public key / private key pair and stores them in files
-
+import hashlib
 import sys, getopt
 import random
 from math import gcd
+from paddingfunc import paddingFunc
+
 def readInputs(commandl):
     pname = ''
     sname = ''
+    cname = ''
     numbits =0
     try:
-        opts, args = getopt.getopt(commandl, "p:s:n:", ["pfile=", "sfile =", "numbits="])
+        opts, args = getopt.getopt(commandl, "p:s:n:c:", ["cfile=","pfile=", "sfile =", "numbits="])
     except getopt.GetoptError:
         sys.exit(2)
     for opt, arg in opts:
@@ -16,6 +19,8 @@ def readInputs(commandl):
             pname = arg
         elif opt in ("-s", "--sfile"):
             sname = arg
+        elif opt in ("-c", "--cfile"):
+            cname = arg
         elif opt in ("-n", "--numbits"):
             numbits = arg
     if(pname == ''):
@@ -28,9 +33,28 @@ def readInputs(commandl):
         print("you have to include a keylength")
         exit(1)
     
-    return pname, sname, numbits
+    return pname, sname, numbits, cname
 
 #this is the function that implement miller rabin prime testing
+
+def modexp(mess, e, n):
+    count = 1
+    while e:
+        if e & 1:
+            count = count * mess % n
+        e >>= 1
+        mess = mess * mess % n
+    #print(count)
+    return count
+
+def hashfunc(message):
+    m = hashlib.sha256()
+    message = message.encode('utf-8')
+    m.update(message)
+    ret = m.digest()
+    #ret = ret.decode('utf-8')
+    return ret
+
 def isPrime(bits, k):
     
     #k is the correctness factor
@@ -112,12 +136,14 @@ def egcd(a,b):
         return (g, x-(b//a)* y,y)
 
 def main():
-    pname, sname, numbits = readInputs(sys.argv[1:])
+    pname, sname, numbits, cname = readInputs(sys.argv[1:])
 
+    #print("in rsa keygen")
     #print('numbits is "', numbits)
     
     pfile = open(pname,'w')
     sfile = open(sname,'w')
+#    print(sfile)
     numbits = int(numbits)
     #numbits = numbits+2
     #print("numbits is" + str(numbits))
@@ -167,4 +193,41 @@ def main():
     sfile.write(str(d)+"\n")
     pfile.close()
     sfile.close()
+    
+    pfile = open(pname,'r')
+
+#    pubcontents = pfile.read()
+#    print("1")
+    signedpubfile = pname + "-casig"
+#    print(signedpubfile)
+    pubsigfile = open(signedpubfile, 'w')
+ #   print(pubsigfile)
+#    print("2")
+    if(cname != ""):
+        kfile = open(cname, 'r')
+    else:
+        kfile = open(sname, 'r')
+
+    numbits = int(kfile.readline().rstrip())
+    #print(numbits)
+    n = int(kfile.readline().rstrip())
+   # print(n)
+    e = int(kfile.readline().rstrip())
+    #print(e)
+    message = pfile.read().rstrip()
+#    print("3")
+   # print("message is " + message)
+    message = hashfunc(message)
+    paddedmessage = paddingFunc(message, int(numbits/2))
+  #  print("padmess is "+ str(paddedmessage))
+    if(paddedmessage == 1):
+        quit(1)
+    else:
+        int_mess = int.from_bytes(paddedmessage, byteorder='big')
+ #       print("int mess is", int_mess)
+        Exp = modexp(int_mess, e, n)
+#    print("4")
+#    print("exp is "+str(Exp))
+    pubsigfile.write(str(Exp))
+#    print("5")    
 main()

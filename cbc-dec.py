@@ -1,5 +1,5 @@
 import sys
-from reuseFunc import readInputs
+from reuseFunc2 import readInputs
 import binascii as ba
 from Crypto.Cipher import AES
 from Crypto.Util import strxor

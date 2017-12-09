@@ -16,8 +16,8 @@ def paddingFunc(message, length):
     while(len(padded) < length):
         left = length - len(padded)
         
-        #newpad = os.urandom(left +20)
-        newpad = b'01'
+        newpad = os.urandom(left +20)
+        #newpad = b'01'
         newpad = newpad.replace(b'00', b'')
         padded = padded + newpad[:left]
 
@@ -26,7 +26,7 @@ def paddingFunc(message, length):
         print("padded is the wrong size")
         return 1
 
-  #  message = (bytearray(message.encode('utf-8')))
+    message = (bytearray(message.encode('utf-8')))
     pad = b''.join([b'\x00\x02', padded, b'\x00'])
     while(len(message)+len(pad) < (length*2)/8):
         pad = b''.join([pad, b'\x00'])
