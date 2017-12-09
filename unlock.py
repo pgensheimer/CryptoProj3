@@ -58,7 +58,7 @@ def main():
     for dirName, subdirList, fileList in os.walk(args.dname):
         for fname in fileList:
             fname = args.dname+"/"+fname
-            print(fname)
+            #print(fname)
             if fname[-9:] == "encrypted":
                 tagname = fname + "tag"
                 namelength = len(fname) -9
