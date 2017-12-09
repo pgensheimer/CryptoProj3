@@ -67,7 +67,7 @@ def main():
                 
                 ret = subprocess.check_output(["python", "cbc-dec.py", "-i", fname, "-k", aesfilename, "-o", realname])
                 ret = subprocess.check_output(["python", "cbcmac-validate.py", "-m", realname, "-k", aesfilename, "-t", tagname])
-                print(ret)
+                #print(ret)
                 if ret == b'True\r\n':
                     val = 0
                     #print("accept")
@@ -76,12 +76,8 @@ def main():
                     exit(1)
                 os.remove(tagname)
                 os.remove(fname)
-                
-            #print(fname)
-          #fname2 = args.dname+"/"+fname
-         #   outfile = fname2+"encrypted"
-        #    ret = subprocess.check_output(["python", "cbc-enc.py", "-i", fname2, "-k", aesfilename, "-o", outfile])
+    os.remove(symkeyfile)
+    os.remove(aesfilename)
+    os.remove(symkeysig)
 
-  #subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
-    #print("back from subprocess")
 main()
