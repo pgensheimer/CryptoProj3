@@ -22,7 +22,7 @@ def main():
     message = mfile.read()
     message = message.rstrip()
     
-    tag = tfile.readline()
+    tag = tfile.read()
     tag = tag.rstrip()
 
     key = kfile.read()
@@ -95,9 +95,9 @@ def main():
     
     ciphertext = ciphertext[-16:]
     
-  #  print("ciphertext is "+str(ciphertext))
+    print("ciphertext is "+str(ciphertext))
     
-   # print("old tag is " + str(tag))
+    print("old tag is " + str(tag))
     
     
     if tag == ciphertext:

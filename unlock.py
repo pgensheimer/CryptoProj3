@@ -58,13 +58,16 @@ def main():
     for dirName, subdirList, fileList in os.walk(args.dname):
         for fname in fileList:
             fname = args.dname+"/"+fname
+            print(fname)
             if fname[-9:] == "encrypted":
                 tagname = fname + "tag"
                 namelength = len(fname) -9
-                realneame = fname[:namelength]
+                
+                realname = fname[:namelength]
+                
                 ret = subprocess.check_output(["python", "cbc-dec.py", "-i", fname, "-k", aesfilename, "-o", realname])
                 ret = subprocess.check_output(["python", "cbcmac-validate.py", "-m", realname, "-k", aesfilename, "-t", tagname])
-                #print(ret)
+                print(ret)
                 if ret == b'True\r\n':
                     val = 0
                     #print("accept")
