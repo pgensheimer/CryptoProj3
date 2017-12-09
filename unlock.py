@@ -41,19 +41,43 @@ def main():
     symkeyfile = "symkeyman"
     symkeysig = "symkeyman-casig"
 
-    print(randkey)
+    #print(randkey)
     #make randkeyfile
 
-    ret = subprocess.check_output(["python", "rsa-dec.py", "-k", args.rname, "-i", aesfilename, "-o", symkeyfile])
+    #ret = subprocess.check_output(["python", "rsa-dec.py", "-k", args.rname, "-i", aesfilename, "-o", symkeyfile])
 
-    ret = subprocess.check_output(["python", "rsa-sign.py", "-k", args.rname, "-m", aesfilename, "-s", symkeysig])
+    ret = subprocess.check_output(["python", "rsa-validate.py", "-k", args.rname, "-m", symkeyfile, "-s", symkeysig])
 
+    if ret == b'True\r\n':
+        val = 0
+        #print("accept")
+    else:
+        print("failure: problem verifying public key information")
+        exit(1)
+    
     for dirName, subdirList, fileList in os.walk(args.dname):
         for fname in fileList:
-            print(fname)
-            fname2 = args.dname+"/"+fname
-            outfile = fname2+"encrypted"
-            ret = subprocess.check_output(["python", "cbc-enc.py", "-i", fname2, "-k", aesfilename, "-o", outfile])
+            fname = args.dname+"/"+fname
+            if fname[-9:] == "encrypted":
+                tagname = fname + "tag"
+                namelength = len(fname) -9
+                realneame = fname[:namelength]
+                ret = subprocess.check_output(["python", "cbc-dec.py", "-i", fname, "-k", aesfilename, "-o", realname])
+                ret = subprocess.check_output(["python", "cbcmac-validate.py", "-m", realname, "-k", aesfilename, "-t", tagname])
+                #print(ret)
+                if ret == b'True\r\n':
+                    val = 0
+                    #print("accept")
+                else:
+                    print("failure: problem taging file"+ tagname)
+                    exit(1)
+                os.remove(tagname)
+                os.remove(fname)
+                
+            #print(fname)
+          #fname2 = args.dname+"/"+fname
+         #   outfile = fname2+"encrypted"
+        #    ret = subprocess.check_output(["python", "cbc-enc.py", "-i", fname2, "-k", aesfilename, "-o", outfile])
 
   #subprocess.run(["python", "rsa-keygen.py", "-p", args.pname, "-s", args.vkname, "-n", "256"])
     #print("back from subprocess")
